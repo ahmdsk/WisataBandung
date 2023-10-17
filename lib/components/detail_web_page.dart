@@ -4,10 +4,17 @@ import 'package:wisatabandung/components/favorite_button.dart';
 
 import '../model/tourism_place.dart';
 
-class DetailWebPage extends StatelessWidget {
+class DetailWebPage extends StatefulWidget {
   final TourismPlace place;
 
   const DetailWebPage({super.key, required this.place});
+
+  @override
+  State<DetailWebPage> createState() => _DetailWebPageState();
+}
+
+class _DetailWebPageState extends State<DetailWebPage> {
+  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,18 +59,20 @@ class DetailWebPage extends StatelessWidget {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
-                            child: Image.asset(place.imageAsset),
+                            child: Image.asset(widget.place.imageAsset),
                           ),
                           const SizedBox(
                             height: 16.0,
                           ),
                           Scrollbar(
+                            controller: _scrollController,
                             child: Container(
                               height: 150,
                               padding: const EdgeInsets.only(bottom: 16.0),
                               child: ListView(
+                                controller: _scrollController,
                                 scrollDirection: Axis.horizontal,
-                                children: place.imageUrls.map((place) {
+                                children: widget.place.imageUrls.map((place) {
                                   return Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: ClipRRect(
@@ -89,7 +98,7 @@ class DetailWebPage extends StatelessWidget {
                             mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
                               Text(
-                                place.name,
+                                widget.place.name,
                                 textAlign: TextAlign.center,
                                 style: menuFontStyle,
                               ),
@@ -104,7 +113,7 @@ class DetailWebPage extends StatelessWidget {
                                         width: 8.0,
                                       ),
                                       Text(
-                                        place.openDays,
+                                        widget.place.openDays,
                                         style: textFontStyle,
                                       )
                                     ],
@@ -119,7 +128,7 @@ class DetailWebPage extends StatelessWidget {
                                     width: 8.0,
                                   ),
                                   Text(
-                                    place.openTime,
+                                    widget.place.openTime,
                                     style: textFontStyle,
                                   )
                                 ],
@@ -130,7 +139,7 @@ class DetailWebPage extends StatelessWidget {
                                   const Icon(Icons.monetization_on),
                                   const SizedBox(width: 8.0),
                                   Text(
-                                    place.ticketPrice,
+                                    widget.place.ticketPrice,
                                     style: textFontStyle,
                                   )
                                 ],
@@ -139,7 +148,7 @@ class DetailWebPage extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16.0),
                                 child: Text(
-                                  place.description,
+                                  widget.place.description,
                                   textAlign: TextAlign.justify,
                                   style: textFontStyle,
                                 ),
@@ -157,5 +166,11 @@ class DetailWebPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
